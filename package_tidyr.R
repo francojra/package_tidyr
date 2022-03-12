@@ -102,3 +102,31 @@ imdb_2 <- imdb %>%
   ) 
 
 View(imdb_2)
+
+# Pivotagem --------------------------------------------------------------------------------------------------------------------------------
+
+## O conceito de pivotagem no tidyverse se refere a mudança da estrutura da base, geralmente 
+## para alcançar o formato tidy.
+
+## Geralmente realizamos pivotagem quando nossas linhas não são unidades observacionais ou 
+## nossas colunas não são variáveis. Ela é similiar à pivotagem do Excel, mas um pouco mais 
+## complexa.
+
+## O ato de pivotar resulta em transformar uma base de dados long em wide e vice-versa.
+
+## Uma base no formato long possui mais linhas e pode ter menos colunas, enquanto no 
+## formato wide poussi menos linhas e pode ter mais colunas.
+
+## Antigamente, utilizávamos as funções gather() e spread() para fazer as operações de pivotagem.
+
+## Agora, no lugar de gather(), utilizamos a função pivot_longer(). Abaixo, transformamos as 
+## colunas ator1, ator2 e ator3 em duas colunas: ator_atriz e protagonismo.
+
+imdb %>% 
+  pivot_longer(
+    cols = starts_with("ator"), 
+    names_to = "protagonismo",
+    values_to = "ator_atriz"
+  ) %>% 
+  select(titulo, ator_atriz, protagonismo) %>% 
+  head(6)
