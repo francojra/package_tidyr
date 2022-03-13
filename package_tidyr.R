@@ -44,7 +44,7 @@ library(ggplot2)
 imdb <- readr::read_rds("imdb.rds")
 View(imdb)
 
-# separate() e unite() ---------------------------------------------------------------------------------------------------------------------
+# Funções separate() e unite() ---------------------------------------------------------------------------------------------------------------------
 
 ## A função separate() separa duas ou mais variáveis que estão concatenadas em uma mesma coluna. 
 ## A sintaxe da função está apresentada abaixo.
