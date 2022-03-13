@@ -125,8 +125,66 @@ View(imdb_2)
 imdb %>% 
   pivot_longer(
     cols = starts_with("ator"), 
-    names_to = "protagonismo",
-    values_to = "ator_atriz"
+    names_to = "protagonismo", # Se apresenta na coluna
+    values_to = "ator_atriz" # Se apresenta nas linhas da coluna
   ) %>% 
   select(titulo, ator_atriz, protagonismo) %>% 
   head(6)
+
+## Se considerarmos que na análise da base IMDB cada observação deve ser um filme, então 
+## essa nova base já não mais tidy, pois agora cada filme aparece em três linhas diferentes, 
+## uma vez para cada um de seus atores.
+
+## Nesse sentido, embora possa parecer que a variável protagonismo estava implícita na base 
+## original, ela não é uma variável de fato. Todos filmes têm um ator_1, um ator_2 e um ator_3.
+## Não existe nenhuma informação sobre o filme que podemos tirar da coluna protagonismo,
+## pois ela qualifica apenas os atores, não o filme em si.
+
+## A função pivot_wider() faz a operação inversa da pivot_longer(). 
+## Se aplicarmos as duas funções em sequência, voltamos para a base original.
+
+imdb_3 <- imdb %>% 
+  pivot_longer(
+    cols = starts_with("ator"), 
+    names_to = "ator_protagonismo",
+    values_to = "ator_nome"
+  ) 
+
+View(imdb_3)
+
+imdb_4 <- imdb_3 %>%
+  pivot_wider(
+    names_from = "ator_protagonismo",
+    values_from = "ator_nome"
+  ) %>% 
+  head(4)
+
+View(imdb_4)
+
+## A base imdb não possui nenhuma variável que faça sentido aplicarmos diretamente a 
+## função pivot_wider(). Vamos então considerar a seguinte tabela derivada da base imdb:
+
+tab_romance_terror <- imdb %>%
+  filter(ano >= 2010) %>%
+  mutate(
+    genero = case_when(
+      stringr::str_detect(generos, "Romance") ~ "Romance",
+      stringr::str_detect(generos, "Horror") ~ "Horror",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(genero)) %>%
+  group_by(ano, genero) %>%
+  summarise(receita_media = mean(receita, na.rm = TRUE))
+tab_romance_terror 
+
+## Essa tabela possui a receita média dos filmes de romance e terror nos anos de 2010 a 2016.
+
+## Para apresentar essa tabela em uma reunião, por exemplo, pode ficar ser mais agradável 
+## ter os anos nas colunas e não nas linhas. Para isso, basta utilizarmos a função pivot_wider().
+
+tab_romance_terror %>% 
+  pivot_wider(
+    names_from = ano,
+    values_from = receita_media
+  )
