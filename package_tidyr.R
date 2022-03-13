@@ -220,3 +220,26 @@ head(imdb_nest, 8)
 ## Abaixo, acessamos os dados do único filme de 1916 (primeira linha da base imdb_nest).
 
 imdb_nest$data[[1]]
+
+## Imagine que queiramos fazer, para cada ano, um gráfico de dispersão da receita contra 
+## o orçamento dos filmes lançados no ano.
+
+## Com a base no formato de list columns, basta criarmos uma função para gerar o gráfico 
+## e utilizarmos a função purrr::map().
+
+## Abaixo, construímos a função fazer_grafico_dispersao(), que será aplicada a cada uma 
+##das bases contidas na coluna data da base imdb_nest. Os gráficos, respectivamos a cada 
+## ano, são salvos na coluna grafico.
+
+fazer_grafico_dispersao <- function(tab) {
+  tab %>%
+    ggplot(aes(x = orcamento, y = receita)) +
+    geom_point()
+}
+
+imdb_graficos <- imdb_nest %>% 
+  mutate(
+    grafico = purrr::map(data, fazer_grafico_dispersao)
+  )
+
+head(imdb_graficos, 6)
