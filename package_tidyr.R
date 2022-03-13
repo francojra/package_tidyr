@@ -188,3 +188,35 @@ tab_romance_terror %>%
     names_from = ano,
     values_from = receita_media
   )
+
+#  List columns ----------------------------------------------------------------------------------------------------------------------------
+
+## Um terceiro conceito de dados tidy é que cada célula da tabela possui um valor. No entanto, 
+## quando estamos programando, muitas vezes vale apena abandonar essa definição e guardarmos
+## objetos mais complexos nas células de uma tabela.
+
+## Utilizando as chamadas list columns podemos guardar virtualmente qualquer objeto em nossas 
+## tibbles, como gráficos, resultados de modelos ou até mesmo outras tabelas.
+
+## Uma forma de trabalhar com list columns consiste em utilizarmos as funções
+
+## - nest(): para criar uma list column;
+
+## - unnest(): para desfazer uma list column.
+
+## A forma mais simples de utilizarmos uma list column é aninhar a nossa base com relação 
+## a uma variável.
+
+imdb_nest <- imdb %>%
+  group_by(ano) %>%
+  nest() %>% 
+  arrange(ano)
+
+head(imdb_nest, 8)
+
+## A base imdb_nest possui duas colunas ano e data e uma linha para cada ano. Na coluna data, 
+## temos o restante da base imdb, recortada para cada um dos anos.
+
+## Abaixo, acessamos os dados do único filme de 1916 (primeira linha da base imdb_nest).
+
+imdb_nest$data[[1]]
