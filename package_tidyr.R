@@ -243,3 +243,19 @@ imdb_graficos <- imdb_nest %>%
   )
 
 head(imdb_graficos, 6)
+
+## Para acessar cada um dos gráficos, basta rodar o código abaixo.
+
+imdb_graficos$grafico[[74]] # Pegando o gráfico referente ao ano de 2000
+
+## Ou, escolhendo diretamente pelo ano
+
+imdb_graficos %>% 
+  filter(ano == 2000) %>% 
+  pull(grafico)
+
+## A função unnest() remove a estrutura de list column. Fazendo a operação abaixo, 
+## voltamos para a base imdb original.
+
+imdb_nest %>%
+  unnest(cols = "data")
