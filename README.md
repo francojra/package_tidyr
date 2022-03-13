@@ -8,6 +8,6 @@
 ### Etapas do script
 
 1. O pacote tidyr;
-2. separate() e unite();
+2. Funções separate() e unite();
 3. Pivotagem;
 4. List columns.
